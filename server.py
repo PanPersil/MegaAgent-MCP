@@ -527,7 +527,7 @@ def _run_docker(cfg: dict, code: str) -> str:
             security_opt=security_opts,
             cap_drop=["ALL"],
             ulimits=ulimits,
-            tmpfs={'/tmp': 'rw,size=64m,uid=65534'},
+            tmpfs={'/tmp': 'rw,exec,size=64m,uid=65534,mode=1777'},
             stdout=True,
             stderr=True
         )
