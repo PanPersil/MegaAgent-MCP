@@ -175,10 +175,6 @@ On Debian/Ubuntu:
 ```bash
 sudo apt install tesseract-ocr
 ```
-On Arch Linux:
-```bash
-sudo pacman -S tesseract
-```
 
 ### 4. Start SearXNG (web search backend)
 ```bash
@@ -238,18 +234,9 @@ The server listens for MCP connections via Streamable-HTTP/WebSocket on `http://
 - [x] Docker sandbox
 - [x] OCR
 - [x] Browser automation
-- [ ] Local embedding retrieval
-- [ ] Semantic vector search
-- [ ] Multi-user authentication
-- [ ] Streaming tool responses
 
 ---
 
-## Screenshots
-
-*(Add a demo GIF, tool list screenshot, web search example, and HTML rendering example here.)*
-
----
 
 ## Intended Use Cases
 
