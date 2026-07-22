@@ -120,6 +120,7 @@ Mega Agent MCP includes several security layers by default:
 
 ### 1. Clone the repository
 ```bash
+cd ~
 git clone https://github.com/PanPersil/MegaAgent-MCP.git
 cd MegaAgent-MCP
 ```
@@ -138,36 +139,11 @@ pip install -r requirements.txt
 playwright install chromium
 ```
 
-`requirements.txt` should include, among others:
-```
-mcp[cli]>=1.0.0
-fastmcp>=0.1.0
-httpx>=0.27.0
-aiosqlite>=0.20.0
-trafilatura>=1.9.0
-beautifulsoup4>=4.12.0
-readability-lxml>=0.8.1
-justext>=3.0.0
-lxml>=5.2.2
-rank-bm25>=0.2.2
-cachetools>=5.3.0
-docker>=7.1.0
-playwright>=1.44.0
-PyMuPDF>=1.24.0
-python-docx>=1.1.2
-python-pptx>=0.6.23
-pandas>=2.2.0
-Pillow>=10.3.0
-pytesseract>=0.3.10
-openpyxl>=3.1.2
-odfpy>=1.4.1
-uvicorn>=0.30.0
-```
 
 ### 3. System dependencies
 Not everything is installable via pip. Mega Agent MCP also requires:
 - Docker
-- Chromium (installed automatically via `playwright install chromium`)
+- Chromium (installed automatically via `playwright install chromium`, *Linux note*: if you encounter an `error while loading shared libraries`, run `sudo playwright install-deps chromium`)
 - Tesseract OCR
 - SearXNG
 
@@ -181,8 +157,8 @@ sudo apt install tesseract-ocr tesseract-ocr-rus tesseract-ocr-eng
 # Create directory to SearXNG service
 mkdir ~/searxng && cd ~/searxng
 
-# Download and use settings.yml from repository
-curl -L -o settings.yml https://raw.githubusercontent.com/PanPersil/MegaAgent-MCP/refs/heads/main/settings.yml
+# Copy settings.yml from the cloned repository
+cp ~/MegaAgent-MCP/settings.yml ~/searxng/settings.yml
 
 # Run SearXNG container
 docker run -d --name searxng -p 8888:8080 -v $(pwd)/settings.yml:/etc/searxng/settings.yml searxng/searxng
