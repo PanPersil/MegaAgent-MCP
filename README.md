@@ -1,4 +1,4 @@
-# 🚀 Mega Agent MCP
+# Mega Agent MCP
 
 [![Production Ready](https://img.shields.io/badge/Status-Production_Ready-success.svg)](#)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
@@ -6,92 +6,117 @@
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-purple.svg)](#)
 [![Docker Supported](https://img.shields.io/badge/Docker-Supported-2496ED.svg)](#)
 
-**Mega Agent MCP** is a production-ready Model Context Protocol (MCP) server designed to provide Large Language Models with powerful external capabilities including web search, article extraction, GitHub analysis, document parsing, browser automation, secure code execution, and intelligent forum parsing.
+**Mega Agent MCP** is a production-ready Model Context Protocol (MCP) server that gives Large Language Models a wide set of external capabilities: web search, article extraction, GitHub analysis, document parsing, browser automation, secure code execution, and forum parsing.
 
-The project focuses on providing a fast, lightweight, and self-hostable backend that works with any MCP-compatible client or AI model.
-
----
-
-## 🤔 Why Mega Agent MCP?
-
-Unlike many MCP servers that implement only one or two tools, Mega Agent MCP combines numerous capabilities into a single optimized server while maintaining **security, performance, and low resource consumption**. 
-
-It eliminates the need to run 5 different MCP servers by providing a unified, async-first AI backend equipped with its own SQLite caching, Docker sandboxing, and rate-limiting.
-
-*(Insert Demo GIF here)*
+The project focuses on being a fast, lightweight, and self-hostable backend that works with any MCP-compatible client or AI model.
 
 ---
 
-## 🧰 Tool Categories
+## Why Mega Agent MCP
 
-The server exposes a highly organized set of tools divided by their domain:
+Most MCP servers implement one or two tools. Mega Agent MCP combines many capabilities into a single optimized server while keeping security, performance, and resource usage under control.
 
-```text
-🌐 Internet
+It removes the need to run five different MCP servers by providing one unified, async-first backend with its own SQLite caching, Docker sandboxing, and rate limiting.
+
+*(Demo GIF placeholder)*
+
+---
+
+## Architecture
+
+```
+LLM
+ │
+ ▼
+MCP Client
+ │
+ ▼
+Mega Agent MCP
+ ├── Web Search
+ ├── GitHub
+ ├── Docker Sandbox
+ ├── Browser
+ ├── OCR
+ ├── Documents
+ └── SQLite Cache
+```
+
+---
+
+## Tool Categories
+
+```
+Internet
  ├── web_search
  ├── fetch_page
  ├── search_and_read
  └── browse_url
 
-📚 GitHub
+GitHub
  ├── fetch_github_repo
  └── fetch_github_file
 
-💬 Forums
+Forums
  └── fetch_thread
 
-📄 Documents
+Documents
  ├── read_document
  └── render_html_css
 
-💻 Execution
+Execution
  ├── execute_code
  └── get_current_time
 ```
 
 ---
 
-## ✨ Features
+## Features
 
-### 🌐 Web Search & Reading
-* **Web Search**: Searches the internet through SearXNG with language selection and BM25 ranking.
-* **Article Reader**: Extracts clean content using a robust cascade parser (`Trafilatura` → `Readability` → `jusText` → `BeautifulSoup`). Automatically removes ads, sidebars, and scripts.
-* **Smart Search + Read**: A Perplexity-style pipeline. Searches → BM25 Ranking → Downloads → Extracts → Merges the top results.
-* **JavaScript Browser**: Uses Playwright Chromium for JS-heavy websites (React, Vue, SPAs).
+**Web Search & Reading**
+- Web Search — searches the internet through SearXNG with language selection and BM25 ranking.
+- Article Reader — extracts clean content via a cascade parser (`Trafilatura` → `Readability` → `jusText` → `BeautifulSoup`). Automatically strips ads, sidebars, and scripts.
+- Smart Search + Read — a Perplexity-style pipeline: search → BM25 ranking → download → extract → merge top results.
+- JavaScript Browser — uses Playwright Chromium for JS-heavy sites (React, Vue, SPAs).
 
-### 📚 GitHub Integration
-* **Repository Reader**: Analyzes repository trees, extracts `README.md`, and detects default branches via the GitHub REST API without cloning.
-* **File Reader**: Downloads and reads individual source code files or documentation directly from public repositories.
+**GitHub Integration**
+- Repository Reader — analyzes repo trees, extracts `README.md`, and detects default branches via the GitHub REST API without cloning.
+- File Reader — downloads and reads individual source files or docs directly from public repositories.
 
-### 💬 Intelligent Forum Parsing
-* **Reddit Parser**: Recursively parses nested Reddit discussions through the JSON API. Supports sorting, time filters, and internal BM25 search.
-* **4PDA Parser**: Reads entire 4PDA forum topics. Supports `recent`, `full thread`, and `first/last page` modes while skipping duplicated header posts.
+**Forum Parsing**
+- Reddit Parser — recursively parses nested Reddit discussions via the JSON API, with sorting, time filters, and internal BM25 search.
+- 4PDA Parser — reads full 4PDA forum topics, supporting `recent`, `full thread`, and `first/last page` modes while skipping duplicate header posts.
 
-### 💻 Secure Code Sandbox
-Runs code in **strictly isolated Docker containers** (Python, C, C++, Java, Node.js, PHP).
-* **Security Layers**: Network disabled, Read-only filesystem, Non-root user (`nobody`), Capability dropping, Seccomp profile support, `no-new-privileges`, CPU/RAM/PID limits, and `tmpfs` mounts.
+**Secure Code Sandbox**
+Runs code in strictly isolated Docker containers (Python, C, C++, Java, Node.js, PHP).
+- Security layers: network disabled, read-only filesystem, non-root user (`nobody`), capability dropping, seccomp profile support, `no-new-privileges`, CPU/RAM/PID limits, `tmpfs` mounts.
 
-### 📄 Document & Visual Processing
-* **Document Reader**: Parses PDF, DOCX, PPTX, XLSX, XLS, CSV, and ODS. Features smart PDF text extraction with block ordering.
-* **Smart OCR**: Uses Tesseract OCR. If a PDF is a scanned image, it automatically falls back to rendering the page and extracting text visually.
-* **HTML Renderer**: Uses Playwright to render raw HTML/CSS and generate screenshots (useful for AI UI generation and previews).
-
-### ⚡ Performance & Caching
-* **Asynchronous Architecture**: Fully async HTTP calls, parallel downloads, and database operations.
-* **Database Cache**: SQLite cache with WAL mode automatically stores downloaded pages (TTL-based) to drastically reduce network overhead.
-* **BM25 Retrieval**: Built-in, RAM-cached semantic-like ranking without requiring heavy GPU embeddings.
+**Document & Visual Processing**
+- Document Reader — parses PDF, DOCX, PPTX, XLSX, XLS, CSV, and ODS, with smart PDF text extraction and block ordering.
+- Smart OCR — uses Tesseract OCR; if a PDF is a scanned image, falls back to rendering the page and extracting text visually.
+- HTML Renderer — uses Playwright to render raw HTML/CSS and generate screenshots (useful for AI UI generation and previews).
 
 ---
 
-## 🛡️ Security
-Mega Agent MCP includes enterprise-grade security layers:
-* **SSRF Protection**: Strict URL validation. Blocks loopback, private networks, multicast, and link-local addresses (IPv4 & IPv6).
-* **Input Validation**: Hard limits on request payloads (Max 1 MB input) and file sizes (Max 50 MB documents).
-* **Rate Limiting**: Built-in sliding window rate limiting prevents abuse by malicious clients.
+## Performance
+
+- Fully asynchronous architecture — async HTTP calls, parallel downloads, async DB operations
+- SQLite cache with WAL mode, TTL-based, to cut network overhead
+- Persistent Playwright browser sessions
+- RAM-cached BM25 retrieval — lightweight, semantic-like ranking without heavy GPU embeddings
+- Minimal memory footprint
 
 ---
 
-## 🛠️ Installation
+## Security
+
+Mega Agent MCP includes several security layers by default:
+- **SSRF protection** — strict URL validation; blocks loopback, private networks, multicast, and link-local addresses (IPv4 and IPv6)
+- **Input validation** — hard limits on request payloads (max 1 MB input) and file sizes (max 50 MB documents)
+- **Rate limiting** — sliding-window rate limiting to prevent abuse
+
+---
+
+## Installation
 
 ### 1. Clone the repository
 ```bash
@@ -99,8 +124,8 @@ git clone https://github.com/PanPersil/MegaAgent-MCP.git
 cd MegaAgent-MCP
 ```
 
-### 2. Install Dependencies
-Make sure you have Python 3.11+ installed. It's recommended to use a virtual environment.
+### 2. Install dependencies
+Requires Python 3.11+. A virtual environment is recommended.
 ```bash
 # Create and activate virtual environment
 python -m venv venv
@@ -113,61 +138,136 @@ pip install -r requirements.txt
 playwright install chromium
 ```
 
-*Note: For OCR and document support, you may need system packages like `tesseract-ocr` and `poppler-utils` depending on your OS.*
+`requirements.txt` should include, among others:
+```
+mcp[cli]>=1.0.0
+fastmcp>=0.1.0
+httpx>=0.27.0
+aiosqlite>=0.20.0
+trafilatura>=1.9.0
+beautifulsoup4>=4.12.0
+readability-lxml>=0.8.1
+justext>=3.0.0
+lxml>=5.2.2
+rank-bm25>=0.2.2
+cachetools>=5.3.0
+docker>=7.1.0
+playwright>=1.44.0
+PyMuPDF>=1.24.0
+python-docx>=1.1.2
+python-pptx>=0.6.23
+pandas>=2.2.0
+Pillow>=10.3.0
+pytesseract>=0.3.10
+openpyxl>=3.1.2
+odfpy>=1.4.1
+uvicorn>=0.30.0
+```
 
-### 3. Start SearXNG (Web Search Backend)
-We use SearXNG as the private search engine backend. Set it up easily using Docker:
+### 3. System dependencies
+Not everything is installable via pip. Mega Agent MCP also requires:
+- Docker
+- Chromium (installed automatically via `playwright install chromium`)
+- Tesseract OCR
+- SearXNG
+
+On Debian/Ubuntu:
+```bash
+sudo apt install tesseract-ocr
+```
+On Arch Linux:
+```bash
+sudo pacman -S tesseract
+```
+
+### 4. Start SearXNG (web search backend)
 ```bash
 # Create a dummy settings file if you don't have a custom one
 touch settings.yml
 
 # Run SearXNG container
-docker run -d   --name searxng   -p 8888:8080   -v $(pwd)/settings.yml:/etc/searxng/settings.yml   searxng/searxng
+docker run -d --name searxng -p 8888:8080 -v $(pwd)/settings.yml:/etc/searxng/settings.yml searxng/searxng
 
 # Enable auto-restart so it survives reboots
 docker update --restart unless-stopped searxng
 ```
 
-### 4. Run the Server
+### 5. Run the server
 ```bash
 python server.py
 ```
-The server will start listening for MCP connections via Streamable-HTTP/WebSocket on `http://0.0.0.0:8100/mcp`.
+The server listens for MCP connections via Streamable-HTTP/WebSocket on `http://0.0.0.0:8100/mcp`.
 
 ---
 
-## 🧰 Available Tools Reference
+## Available Tools Reference
 
 | Tool Name | Category | Description |
-|-----------|----------|-------------|
-| `web_search` | 🌐 Internet | Standard internet search using SearXNG. |
-| `fetch_page` | 🌐 Internet | Reads an article and extracts pure text. |
-| `search_and_read` | 🌐 Internet | Searches and automatically reads the top N pages. |
-| `browse_url` | 🌐 Internet | JavaScript browser for dynamic SPAs. |
-| `fetch_github_repo` | 📚 GitHub | Repository analysis and README extraction. |
-| `fetch_github_file` | 📚 GitHub | Reads specific files from a repository. |
-| `fetch_thread` | 💬 Forums | Deep parser for Reddit / 4PDA discussions. |
-| `execute_code` | 💻 Execution | Secure Docker code execution (Python/C/C++/Java/JS/PHP). |
-| `get_current_time` | 💻 Execution | Returns accurate system time. |
-| `render_html_css` | 📄 Documents | Renders HTML code to an image screenshot. |
-| `read_document` | 📄 Documents | Parses PDF, Word, Excel, PPTX (with OCR). |
+|---|---|---|
+| `web_search` | Internet | Standard internet search using SearXNG. |
+| `fetch_page` | Internet | Reads an article and extracts pure text. |
+| `search_and_read` | Internet | Searches and automatically reads the top N pages. |
+| `browse_url` | Internet | JavaScript browser for dynamic SPAs. |
+| `fetch_github_repo` | GitHub | Repository analysis and README extraction. |
+| `fetch_github_file` | GitHub | Reads specific files from a repository. |
+| `fetch_thread` | Forums | Deep parser for Reddit / 4PDA discussions. |
+| `execute_code` | Execution | Secure Docker code execution (Python/C/C++/Java/JS/PHP). |
+| `get_current_time` | Execution | Returns accurate system time. |
+| `render_html_css` | Documents | Renders HTML code to an image screenshot. |
+| `read_document` | Documents | Parses PDF, Word, Excel, PPTX (with OCR). |
 
 ---
 
-## 🎯 Intended Use Cases
-* **Local AI Assistants**: Connect to `llama.cpp`, Ollama, or LM Studio.
-* **Coding Agents**: Automate GitHub exploration and execute code safely.
-* **Research Assistants**: Aggregate knowledge, read PDFs, and parse forums.
-* **Self-Hosted AI Systems**: A private, no-telemetry backend for your LLMs.
+## Comparison
+
+| Feature | Mega Agent MCP | Typical MCP Server |
+|---|---|---|
+| Web Search | Yes | Partial |
+| GitHub Integration | Yes | No |
+| OCR | Yes | No |
+| Docker Sandbox | Yes | No |
+| Forum Parsing | Yes | No |
+| Browser Rendering | Yes | Partial |
 
 ---
 
-## 📈 Project Status
-**Current status: Production Ready**
+## Roadmap
 
-Mega Agent MCP has been designed to be stable, secure, and practical for real-world usage. While the project is considered production-ready and actively maintained, further improvements, optimizations, and community contributions are always welcome!
+- [x] Web search
+- [x] GitHub support
+- [x] Docker sandbox
+- [x] OCR
+- [x] Browser automation
+- [ ] Local embedding retrieval
+- [ ] Semantic vector search
+- [ ] Multi-user authentication
+- [ ] Streaming tool responses
 
 ---
 
-## 📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+## Screenshots
+
+*(Add a demo GIF, tool list screenshot, web search example, and HTML rendering example here.)*
+
+---
+
+## Intended Use Cases
+
+- **Local AI Assistants** — connect to `llama.cpp`, Ollama, or LM Studio.
+- **Coding Agents** — automate GitHub exploration and execute code safely.
+- **Research Assistants** — aggregate knowledge, read PDFs, and parse forums.
+- **Self-Hosted AI Systems** — a private, no-telemetry backend for your LLMs.
+
+---
+
+## Project Status
+
+**Current Status: Production Ready**
+
+Mega Agent MCP is considered production-ready for self-hosted and local AI deployments. While actively maintained and stable, minor bugs or edge cases may still exist. Contributions, issue reports, and feature suggestions are always welcome.
+
+---
+
+## License
+
+This project is licensed under the MIT License — see the LICENSE file for details.
