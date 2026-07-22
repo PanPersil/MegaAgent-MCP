@@ -560,7 +560,7 @@ async def execute_code(language: str, code: str) -> str:
         "php": {"image": "php:cli-alpine", "cmd": "printf '%s' '{B64_CODE}' | base64 -d > /tmp/m.php && php /tmp/m.php"},
         "c": {"image": "gcc:14-bookworm", "cmd": "printf '%s' '{B64_CODE}' | base64 -d > /tmp/m.c && gcc /tmp/m.c -o /tmp/a.out && /tmp/a.out"},
         "cpp": {"image": "gcc:14-bookworm", "cmd": "printf '%s' '{B64_CODE}' | base64 -d > /tmp/m.cpp && g++ /tmp/m.cpp -o /tmp/a.out && /tmp/a.out"},
-        "java": {"image": "openjdk:21-alpine", "cmd": "printf '%s' '{B64_CODE}' | base64 -d > /tmp/Main.java && cd /tmp && javac Main.java && java Main"}
+        "java": {"image": "eclipse-temurin:21-alpine", "cmd": "printf '%s' '{B64_CODE}' | base64 -d > /tmp/Main.java && cd /tmp && javac Main.java && java Main"}
     }
     if language not in configs: return f"Язык '{language}' не поддерживается."
     return await asyncio.to_thread(_run_docker, configs[language], code)
