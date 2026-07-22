@@ -173,13 +173,16 @@ Not everything is installable via pip. Mega Agent MCP also requires:
 
 On Debian/Ubuntu:
 ```bash
-sudo apt install tesseract-ocr
+sudo apt install tesseract-ocr tesseract-ocr-rus tesseract-ocr-eng
 ```
 
 ### 4. Start SearXNG (web search backend)
 ```bash
-# Create a dummy settings file if you don't have a custom one
-touch settings.yml
+# Create directory to SearXNG service
+mkdir ~/searxng && cd ~/searxng
+
+# Download and use settings.yml from repository
+curl -L -o settings.yml https://raw.githubusercontent.com/PanPersil/MegaAgent-MCP/refs/heads/main/settings.yml
 
 # Run SearXNG container
 docker run -d --name searxng -p 8888:8080 -v $(pwd)/settings.yml:/etc/searxng/settings.yml searxng/searxng
