@@ -143,7 +143,7 @@ playwright install chromium
 ### 3. System dependencies
 Not everything is installable via pip. Mega Agent MCP also requires:
 - Docker
-- Chromium (installed automatically via `playwright install chromium`, *Linux note*: if you encounter an `error while loading shared libraries`, run `sudo playwright install-deps chromium`)
+- Chromium (installed automatically via `playwright install chromium`, *Linux note*: if you encounter an **error while loading shared libraries**, run `sudo playwright install-deps chromium`)
 - Tesseract OCR
 - SearXNG
 
