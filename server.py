@@ -27,8 +27,7 @@ import docker
 from playwright.async_api import async_playwright
 from cachetools import TTLCache
 
-# Документы и OCR
-import fitz  # PyMuPDF
+import fitz
 import docx
 import pptx
 import pandas as pd
@@ -70,19 +69,22 @@ except Exception as e:
 # ---- УПРАВЛЕНИЕ ЖИЗНЕННЫМ ЦИКЛОМ (LIFESPAN) ------------------------------
 @asynccontextmanager
 async def app_lifespan(app):
-    """Graceful shutdown для освобождения ресурсов."""
     yield
     global _http_client, _db_conn, _playwright, _browser
     if _http_client:
         await _http_client.aclose()
+        _http_client = None
     if _db_conn:
         await _db_conn.close()
+        _db_conn = None
     if _browser:
         await _browser.close()
+        _browser = None
     if _playwright:
         await _playwright.stop()
+        _playwright = None
 
-mcp = FastMCP("mega_agent_v8", host="0.0.0.0", port=8100, lifespan=app_lifespan)
+mcp = FastMCP("megaagent", host="0.0.0.0", port=8100, lifespan=app_lifespan)
 
 # ---- RATE LIMITING DECORATOR ---------------------------------------------
 def rate_limit(tool_name: str, max_calls: int = RATE_LIMIT_MAX_CALLS, window: int = RATE_LIMIT_WINDOW):
@@ -113,7 +115,7 @@ def rate_limit(tool_name: str, max_calls: int = RATE_LIMIT_MAX_CALLS, window: in
 # ---- ГЕТТЕРЫ РЕСУРСОВ ----------------------------------------------------
 async def get_client() -> httpx.AsyncClient:
     global _http_client
-    if _http_client is None:
+    if _http_client is None or _http_client.is_closed:
         limits = httpx.Limits(max_connections=50, max_keepalive_connections=20)
         _http_client = httpx.AsyncClient(headers=HEADERS, follow_redirects=True, timeout=15, limits=limits)
     return _http_client
@@ -131,8 +133,9 @@ async def get_db() -> aiosqlite.Connection:
 
 async def get_browser():
     global _playwright, _browser
-    if _browser is None:
-        _playwright = await async_playwright().start()
+    if _browser is None or not _browser.is_connected():
+        if _playwright is None:
+            _playwright = await async_playwright().start()
         _browser = await _playwright.chromium.launch(headless=True)
     return _browser
 
